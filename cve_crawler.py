@@ -49,10 +49,13 @@ def get_data():
 
                         description = detail_soup.find('p', attrs={'data-testid': 'vuln-description'}).get_text()
 
-                        if detail_soup.find('a', attrs={'id': 'Cvss3NistCalculatorAnchor'}) is None:
-                            score = detail_soup.find('a', attrs={'id': 'Cvss3CnaCalculatorAnchor'}).get_text().split(' ')[0]
+                        if detail_soup.find('a', attrs={'id': 'Cvss3NistCalculatorAnchorNA'}):
+                            score = detail_soup.find('a', attrs={'id': 'Cvss2CalculatorAnchor'}).get_text().split(' ')[0]
                         else:
-                            score = detail_soup.find('a', attrs={'id': 'Cvss3NistCalculatorAnchor'}).get_text().split(' ')[0]
+                            if detail_soup.find('a', attrs={'id': 'Cvss3NistCalculatorAnchor'}) is None:
+                                score = detail_soup.find('a', attrs={'id': 'Cvss3CnaCalculatorAnchor'}).get_text().split(' ')[0]
+                            else:
+                                score = detail_soup.find('a', attrs={'id': 'Cvss3NistCalculatorAnchor'}).get_text().split(' ')[0]
                         if score == 'N/A':
                             score = detail_soup.find('a', attrs={'id': 'Cvss2CalculatorAnchor'}).get_text().split(' ')[0]
                         
