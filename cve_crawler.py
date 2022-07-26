@@ -62,10 +62,15 @@ def get_data():
 
                         cpe_data = detail_soup.find('input', attrs={'id': 'cveTreeJsonDataHidden'}).get('value')
                         
-                        start = cpe_data.find('"cpe23Uri"')
-                        end = cpe_data.find('","cpe22Uri"')
-                        cpe_code = cpe_data[start+12:end]
-                        software = cpe_utils.CPE(cpe_code).human().split('*')[0][:-1]
+                        start = cpe_data.find('"cpe22Uri"')
+                        end = cpe_data.find('","status"')
+                        cpe_code = cpe_data[start + 12:end]
+                        vendor = cpe_utils.CPE(cpe_code).get_human("vendor")
+                        product = cpe_utils.CPE(cpe_code).get_human("product")
+                        if product in vendor or vendor in product:
+                            software = product
+                        else:
+                            software = vendor + " " + product
 
                         start = cpe_data.find('"rangeStartVersion"')
                         end = cpe_data.find(',"rangeEndType"')
@@ -80,7 +85,8 @@ def get_data():
                             rangeEndVersion = rangeEndVersion[1:-1]
 
                         if rangeStartVersion == '' and rangeEndVersion == '':
-                            rangeStartVersion = software.split(' ')[-1]
+                            #rangeStartVersion = cpe_utils.CPE(cpe_code).get_human("version")
+                            continue
 
                         insert_data(cur, vuln_row, pub_date, last_mod_date, description, score, software, rangeStartVersion, rangeEndVersion, cwe_id, cwe_name)
                         conn.commit()
