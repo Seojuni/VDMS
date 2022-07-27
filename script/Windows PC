@@ -1,1 +1,26 @@
+@ECHO OFF
+
+
+ECHO [PC-01] >> ../result.txt
+ECHO [Name] 패스워드의 주기적 변경 [/Name]>> ../result.txt
+ECHO [Security_Treat] >> ../result.txt
+ECHO - 동일한 패스워드를 변경하지 않고 오랫동안 사용할 경우 >> ../result.txt
+ECHO 유출이나 무차별 대입공역에 당할 가능성이 높고>> ../result.txt
+ECHO 이전에 사용하던 패스워드를 재사용한다면 >> ../result.txt
+ECHO 비밀번호 추측 공격에 의해 계정을 탈취당할 우려가 있음>> ../result.txt
+ECHO [/Security_Treat]>> ../result.txt
+
+ECHO [Data]>> ../result.txt
+ECHO #net accounts>> ../result.txt
+ECHO.>> ../result.txt
+net accounts>> ../result.txt
+ECHO[/Data] >> ../result.txt
+
+ECHO [Comment]>> ../result.txt
+ECHO [양호]: 최대 암호 사용 기간이 "90일"이하로 설정되어 있는 경우 >> ../result.txt
+ECHO [취약]: 암호 사용 기간이 "제한 없음"이거나 "90일"을 초과하여 설정되어 있는 경우
+ECHO[/Comment] >> ../result.txt
+
+ECHO [Result]>> ../result.txt
+net accounts | find "
 
