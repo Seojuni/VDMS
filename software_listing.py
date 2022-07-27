@@ -23,9 +23,9 @@ def insert_data():
     for l in line[4:-2]:
         print(l.strip().split(' '))
         if " " in l.strip().split(' '):
-            software = " ".join(l.strip().split(' ')[:-2])
+            software = " ".join(l.strip().split(' ')[:-2]).rstrip()
         else:
-            software = " ".join(l.strip().split(' ')[:-1])
+            software = " ".join(l.strip().split(' ')[:-1]).rstrip()
         print("software : " + software)
         version = l.strip().split(' ')[-1]
         print("version : " + version)
