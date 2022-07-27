@@ -34,7 +34,10 @@ def get_data():
                 page_html = page_req.text
                 page_soup = BeautifulSoup(page_html, 'html.parser')
 
-                for i in range(0,11):
+                for i in range(0,20):
+                    if not page_soup.find('a', attrs={'data-testid': 'vuln-detail-link-' + str(i)}):
+                        continue
+                    
                     vuln_row = page_soup.find('a', attrs={'data-testid': 'vuln-detail-link-'+str(i)}).get_text()
                     
                     detail_req = requests.get('https://nvd.nist.gov/vuln/detail/'+vuln_row)
