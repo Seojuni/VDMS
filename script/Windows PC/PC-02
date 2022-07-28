@@ -1,0 +1,12 @@
+@ECHO OFF
+
+rem [PC-02] (상) 1. 계정관리 > 1.2 패스워드 정책이 해당 기관의 보안 정책에 적합하게 설정
+
+secedit /EXPORT /CFG LocalSecurityPolicy.txt
+TYPE LocalSecurityPolicy.txt | find /i "PasswordComplexity" | find "1" > NUL
+rem 1 : 양호 / 2 : 취약
+IF NOT ERRORLEVEL 1 ECHO PC-02 1 >> result.txt
+IF ERRORLEVEL 1 ECHO PC-02 2 >> result.txt
+
+DEL LocalSecurityPolicy.txt
+
