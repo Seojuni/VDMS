@@ -1,4 +1,4 @@
-@echo off
+@ECHO OFF
 
 rem [PC-01] 1. 계정관리 > 1.1 패스워드의 주기적 변경
 
