@@ -4,12 +4,19 @@ from tkinter import ttk
 from tkinter import *
 from tkinter.messagebox import showinfo
 
+from datetime import datetime
+
 import platform
 
 my_os=platform.system()
 
 
+datetime.today()
+datetime.today().year
+datetime.today().month
+datetime.today().day
 
+day=datetime.today().strftime("%A"+', '+"%d"+' '+"%B"+' '+"%Y")
 
 
 
@@ -53,12 +60,22 @@ tree = ttk.Treeview(root)
 
 
 #임시
-#columns=('취약점 진단(OS명)', 'Saturday, 06 June 2022')
-#tree = ttk.Treeview(root, columns=columns, show='headings')
+columns=('취약점 진단(OS명)', 'Saturday, 06 June 2022')
+tree = ttk.Treeview(root, columns=columns, show='headings')
 
 # define headings
-#tree.heading('취약점 진단(OS명)', text='취약점 진단('+my_os+')')
+tree.heading('취약점 진단(OS명)', text='취약점 진단('+my_os+')')
+#tree.heading('취약점 진단('+my_os+')', text='취약점 진단(OS명)')
+tree.heading('Saturday, 06 June 2022', text=day)
 #tree.heading('Saturday, 06 June 2022', text='Saturday, 06 June 2022')
+
+
+#체크박스임시
+#ckvar=IntVar()
+#ckbox=Checkbutton(root, text="가나다", variable=ckvar)
+#ckbox.select()
+#ckbox.deselect()
+#ckbox.grid()
 
 
 
