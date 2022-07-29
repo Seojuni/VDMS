@@ -1,8 +1,17 @@
+#CheckboxTreeview 오류 시 cmd창에서 pip install ttkwidgets 명령어 실행
+from ttkwidgets import CheckboxTreeview 
+
 import tkinter as tk
 import tkinter
 from tkinter import ttk
 from tkinter import *
 from tkinter.messagebox import showinfo
+
+
+
+
+
+
 
 from datetime import datetime
 
@@ -37,8 +46,9 @@ root.columnconfigure(0, weight=1)
 
 
 # create a treeview
-tree = ttk.Treeview(root)
 
+
+tree = ttk.Treeview(root)
 
 
 
@@ -54,7 +64,8 @@ tree = ttk.Treeview(root)
 
 tree.insert('', tk.END, text="\t\t\t\t"+'취약점 진단('+my_os+')'+"\t\t\t\t\t\t\t\t"+day, iid="title", open=False)
 
-
+tree = CheckboxTreeview(root)
+tree.pack()
 
 
 # adding data
@@ -134,8 +145,8 @@ for i in range(67, 87):
 tree.insert('', tk.END, text='Windows 인증 모드 사용', iid=87, open=False)
 tree.move(87, 5, 0)
 
-btn1=Button(root, text='start')
-btn1.grid(row=1, column=0)
+#btn1=Button(root, text='start')
+#btn1.grid(row=1, column=0)
 
 # place the Treeview widget on the root window
 tree.grid(row=0, column=0, sticky='nsew')
