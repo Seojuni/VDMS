@@ -41,39 +41,20 @@ root.columnconfigure(0, weight=1)
 
 
 
-#임시
-#columns=('취약점 진단(OS명)', 'Saturday, 06 June 2022')
-#tree = ttk.Treeview(root, columns=columns, show='headings')
-
-
-# define headings
-#tree.heading('취약점 진단(OS명)', text='취약점 진단(OS명)')
-#tree.heading('Saturday, 06 June 2022', text='Saturday, 06 June 2022')
-
-
-
-
-
-
-
-
 # create a treeview
-#tree = ttk.Treeview(root)
 tree = CheckboxTreeview(root)
 tree.grid()
 
 
-tree["columns"]=("os", "day")
-tree.heading('os', text='취약점 진단('+my_os+')')
-tree.heading('day', text=day)
-tree.column("os", width=60)
-tree.column("day", width=60)
 
 
 
 
+tree["columns"]=["one"]
+tree.heading("#0", text='취약점 진단('+my_os+')')
+tree.heading("#1", text=day)
 
-#tree.insert('', tk.END, text="\t\t\t\t"+'취약점 진단('+my_os+')'+"\t\t\t\t\t\t\t\t"+day, iid="title", open=False)
+
 
 
 
@@ -86,7 +67,7 @@ tree.insert('', tk.END, text='로그 관리', iid=3, open=False)
 tree.insert('', tk.END, text='보안 관리', iid=4, open=False)
 tree.insert('', tk.END, text='DB 관리', iid=5, open=False)
 
-# adding children of first node
+
 
 acc=['Administrator 계정 이름 변경 또는 보안성 강화','Guest 계정 비활성화','불필요한 계정 제거','계정 잠금 임계값 설정','해독 가능한 암호화를 사용하여 암호 저장 해제','관리자 그룹에 최소한의 사용자 포함','Everyone 사용권한을 익명 사용자에 적용 해제',
      '계정 잠금 기간 설정','패스워드 복잡성 설정','패스워드 최소 암호 길이','패스워드 최대 사용 기간','패스워드 최소 사용 기간','마지막 사용자 이름 표시 안함','로컬 로그온 허용', '익명 SID/이름 변환 허용 해제',
