@@ -63,10 +63,17 @@ tree = CheckboxTreeview(root)
 tree.grid()
 
 
+tree["columns"]=("os", "day")
+tree.heading('os', text='취약점 진단('+my_os+')')
+tree.heading('day', text=day)
+tree.column("os", width=60)
+tree.column("day", width=60)
 
 
 
-tree.insert('', tk.END, text="\t\t\t\t"+'취약점 진단('+my_os+')'+"\t\t\t\t\t\t\t\t"+day, iid="title", open=False)
+
+
+#tree.insert('', tk.END, text="\t\t\t\t"+'취약점 진단('+my_os+')'+"\t\t\t\t\t\t\t\t"+day, iid="title", open=False)
 
 
 
