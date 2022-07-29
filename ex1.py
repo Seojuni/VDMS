@@ -15,7 +15,6 @@ import platform
 
 my_os=platform.system()
 
-my_os="Darwin"
 
 if my_os=="Darwin":
     my_os="Mac"
