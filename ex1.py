@@ -122,7 +122,8 @@ for i in range(67, 87):
 tree.insert('', tk.END, text='Windows 인증 모드 사용', iid=87, open=False)
 tree.move(87, 5, 0)
 
-
+btn1=Button(root, text='start')
+btn1.grid()
 
 # place the Treeview widget on the root window
 tree.grid(row=0, column=0, sticky='nsew')
