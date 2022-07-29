@@ -1,5 +1,3 @@
-
-
 import tkinter as tk
 import tkinter
 from tkinter import ttk
@@ -56,17 +54,6 @@ tree = ttk.Treeview(root)
 
 tree.insert('', tk.END, text="\t\t\t\t"+'취약점 진단('+my_os+')'+"\t\t\t\t\t\t\t\t"+day, iid="title", open=False)
 
-
-
-
-
-
-#체크박스임시
-#ckvar=IntVar()
-#ckbox=Checkbutton(root, text="가나다", variable=ckvar)
-#ckbox.select()
-#ckbox.deselect()
-#ckbox.grid()
 
 
 
