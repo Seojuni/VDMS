@@ -1,3 +1,5 @@
+
+
 import tkinter as tk
 import tkinter
 from tkinter import ttk
@@ -31,8 +33,6 @@ root.geometry('1280x960')
 
 
 
-
-
 # configure the grid layout
 root.rowconfigure(0, weight=1)
 root.columnconfigure(0, weight=1)
@@ -45,27 +45,19 @@ tree = ttk.Treeview(root)
 
 
 
-#columns = ('first_name', 'last_name')
 
-#tree = ttk.Treeview(root, columns=columns, show='headings')
-
-# define headings
-#tree.heading('first_name', text='First Name')
-#tree.heading('last_name', text='Last Name')
-#tree.heading('text', text='Departments',  anchor='center')
-
+#체크박스임시
+#ckvar=IntVar()
+#ckbox=Checkbutton(root, text="가나다", variable=ckvar)
+#ckbox.select()
+#ckbox.deselect()
+#ckbox.grid()
 
 
+tree.insert('', tk.END, text="\t\t\t\t"+'취약점 진단('+my_os+')'+"\t\t\t\t\t\t\t\t"+day, iid="title", open=False)
 
 
 
-#임시
-#columns=('취약점 진단(OS명)', 'Saturday, 06 June 2022')
-#tree = ttk.Treeview(root, columns=columns, show='headings')
-
-# define headings
-#tree.heading('취약점 진단(OS명)', text='취약점 진단('+my_os+')')
-#tree.heading('Saturday, 06 June 2022', text=day)
 
 
 
