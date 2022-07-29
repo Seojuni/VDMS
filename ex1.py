@@ -8,11 +8,6 @@ from tkinter import *
 from tkinter.messagebox import showinfo
 
 
-
-
-
-
-
 from datetime import datetime
 
 import platform
@@ -38,34 +33,42 @@ root.geometry('1280x960')
 
 
 
-
-
 # configure the grid layout
 root.rowconfigure(0, weight=1)
 root.columnconfigure(0, weight=1)
 
 
+
+
+
+#임시
+#columns=('취약점 진단(OS명)', 'Saturday, 06 June 2022')
+#tree = ttk.Treeview(root, columns=columns, show='headings')
+
+
+# define headings
+#tree.heading('취약점 진단(OS명)', text='취약점 진단(OS명)')
+#tree.heading('Saturday, 06 June 2022', text='Saturday, 06 June 2022')
+
+
+
+
+
+
+
+
 # create a treeview
-
-
-tree = ttk.Treeview(root)
-
-
+#tree = ttk.Treeview(root)
+tree = CheckboxTreeview(root)
+tree.grid()
 
 
 
-#체크박스임시
-#ckvar=IntVar()
-#ckbox=Checkbutton(root, text="가나다", variable=ckvar)
-#ckbox.select()
-#ckbox.deselect()
-#ckbox.grid()
 
 
 tree.insert('', tk.END, text="\t\t\t\t"+'취약점 진단('+my_os+')'+"\t\t\t\t\t\t\t\t"+day, iid="title", open=False)
 
-tree = CheckboxTreeview(root)
-tree.pack()
+
 
 
 # adding data
@@ -145,8 +148,8 @@ for i in range(67, 87):
 tree.insert('', tk.END, text='Windows 인증 모드 사용', iid=87, open=False)
 tree.move(87, 5, 0)
 
-#btn1=Button(root, text='start')
-#btn1.grid(row=1, column=0)
+btn1=Button(root, text='start')
+btn1.grid(row=1, column=0)
 
 # place the Treeview widget on the root window
 tree.grid(row=0, column=0, sticky='nsew')
