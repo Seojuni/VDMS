@@ -7,14 +7,14 @@ import tkinter
 from tkinter import ttk
 from tkinter import *
 from tkinter.messagebox import showinfo
-
+import tkinter.messagebox as msbox
 
 from datetime import datetime
 
 import platform
 
-my_os=platform.system()
 
+my_os=platform.system()
 
 if my_os=="Darwin":
     my_os="Mac"
@@ -28,6 +28,7 @@ datetime.today().day
 day=datetime.today().strftime("%A"+', '+"%d"+' '+"%B"+' '+"%Y")
 
 
+    
 
 # create root window
 root = tk.Tk()
@@ -205,7 +206,20 @@ elif my_os=="Mac":
             tree.move(i, 3, j)
 
 
-btn1=Button(root, text='start')
+    
+
+list_frame=Frame(root)
+filename=str(day)+'.txt'
+def saveFile():
+    file=open(filename,"w")
+    ts="가나다"
+    #ts=str(list_file.get(0,END))
+    file.write(ts)
+    file.close
+    msbox.showinfo("알림", "저장되었습니다")
+
+
+btn1=Button(root, text='start', command=saveFile)
 btn1.grid(row=1, column=0)
 
 # place the Treeview widget on the root window
