@@ -1,1 +1,136 @@
+[윈도우 진단 스크립트(배치파일)] 1.1 administator 계정 존재 여부 체크
+echo off
+echo #############################################
 
+echo #              pc check                     #
+
+echo #############################################
+
+ setlocal | rem 지역 변수 선언 
+
+set flags = 0 | rem flag 초기화 
+
+set name = 0 | rem name 초기화 
+
+echo [1.1 administrator 계정 이름 바꾸기]
+
+echo ■ 기준
+
+echo 양호 :  Administrator 이름의 계정이 존재함
+
+echo 취약 :  Administrator 이름의 계정이 존재하지 않음
+
+ echo ■ 결과 
+
+ net user > account.txt 
+
+type account.txt | find/i  "Administrator"
+
+if errorlevel 1 echo [양호] Administrator 계정이 존재하지 않음 
+
+if not errorlevel 1 echo [취약] Administrator 계정이 존재함 
+
+ echo ■ 조치 
+
+ if not errorlevel 1 echo 어드민 계정이 발견 되었습니다.  
+
+if not errorlevel 1 set /p flag="admin 계정이름을 변경 하시겠습니까? <Y/N>"
+
+if /i "%flag%" =="y" (set /p name="변경할 계정이름을 입력해 주세요 :") 
+
+if /i "%flag%" =="y" (wmic useraccount where name='Administrator' call rename "%name%")
+
+if /i "%flag%" =="y" echo 계정이름이 "%name%"으로 변경 되었습니다.
+
+ if errorlevel 0 echo 어드민 계정이 없습니다 [안전]
+ 
+ [윈도우 진단 스크립트(배치파일)] 1.2 Guest 계정 상태
+
+@echo off
+
+echo [1.2 Guest 계정 상태]
+
+ setlocal 
+
+set flag=0
+
+ echo ■ 기준
+
+echo .
+
+echo 양호 :  Guest 계정이 비활성화 되어 있는 경우 
+
+echo 취약 :  Guest 계정이 활성화 되어 있는 경우 
+
+echo .
+
+echo ■ 현황
+
+echo .
+
+net user guest > nul
+
+if not errorlevel 1 net user guest | find "활성 계정" 
+
+echo ■ 결과 
+
+net user guest | find "활성 계정" | find "예" > NUL
+
+if errorlevel 1 echo 양호 
+
+if not errorlevel 1 echo 취약
+
+echo ■ 조치
+
+IF Errorlevel 1 echo 양호하여 조치 활동이 없습니다. 
+
+if not errorlevel 1 echo "Guest 계정이 활성화 되어 있습니다"
+
+if not errorlevel 1 set /p flag="Guest 계정이 비활성화 하겠습니까? <Y/N>"
+
+if /i "%flag%"=="y"  net user guest /active:no 
+
+if /i "%flag%" =="y" echo Guest 계정이 비활성화 되어 있습니다
+
+[윈도우 진단 스크립트(배치파일)] 2.3 불필요한 서비스 제거
+ @echo off
+
+echo               ====주요정보통신기반시설 기준으로 서비스 작성=====            
+
+echo ============================================================================
+
+net start | find /I "Alerter"                                                                >> whatservice.txt
+
+ net start | find /I "Clipbook"                                                                  >> whatservice.txt
+
+ net start | find /I "Computer Browser"                                                        >> whatservice.txt
+
+ net start | find /I "DHCP Client"                                                            >> whatservice.txt
+
+ net start | find /I "Alerter"                                                                >> service.txt
+
+ net start | find /I "Clipbook"                                                                  >> service.txt
+
+ net start | find /I "Computer Browser"                                                        >> service.txt
+
+ net start | find /I "DHCP Client"                                                            >> service.txt
+
+for /F %%a in ("service.txt") do set "FileSize=%%~zi"
+
+if %FileSize% EQU 0 ( GOTO PC5-Y
+
+) else ( GOTO PC-N )
+
+:PC5-Y
+
+echo.                                                                                        
+
+echo     양호                                                                         
+
+del service.txt    
+
+:PC-N
+
+echo.                                                                                        
+
+echo     취약 
