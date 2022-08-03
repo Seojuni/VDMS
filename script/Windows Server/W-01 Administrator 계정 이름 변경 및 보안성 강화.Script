@@ -22,7 +22,7 @@ echo ::								>> %DETAIL_FILE%
 echo ::  PASS : Default Administrator name is changed or	>> %DETAIL_FILE%
 echo ::  Strong Password is applied				>> %DETAIL_FILE%
 echo ::								>> %DETAIL_FILE%
-echo ::  MADE By REDUCTO https://tutoreducto.tistory.com/	>> %DETAIL_FILE%
+echo ::  	>> %DETAIL_FILE%
 echo ::								>> %DETAIL_FILE%
 echo ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::			>> %DETAIL_FILE%
 echo. 							>> %DETAIL_FILE%
