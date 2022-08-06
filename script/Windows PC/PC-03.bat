@@ -16,3 +16,4 @@ else (
 )
 
 DEL LocalSeurityPoilicy.txt
+DEL share_folder.txt
