@@ -1,4 +1,6 @@
 @echo off
+REM [W-02] (상) 1. 계정관리 > 1.2 Guest 계정 비활성화
+
 chcp 437 >nul 2>&1
 
 :W_02
