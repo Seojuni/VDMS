@@ -1,7 +1,7 @@
 @echo off
 chcp 437 >nul 2>&1
 
-:W_11
+: [W-11] (상) 2. 서비스 관리 > 2.5 디렉토리 리스팅 제거
 
 set YEAR=%date:~0,4%
 set MONTH=%date:~5,2%
