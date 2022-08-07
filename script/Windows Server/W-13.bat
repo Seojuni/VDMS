@@ -1,7 +1,7 @@
 @echo off
 chcp 437 >nul 2>&1
 
-:W_13
+: [W-13] (상) 2. 서비스 관리 > 2.7 IIS 상위 디렉토리 접근 금지
 
 set YEAR=%date:~0,4%
 set MONTH=%date:~5,2%
