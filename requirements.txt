@@ -8,3 +8,4 @@ ttkwidgets==0.12.1
 Pillow==9.2.0
 lxml==4.9.1
 python-docx==0.8.11
+PyPDF2==2.9.0
