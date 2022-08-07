@@ -1,0 +1,52 @@
+@echo off
+chcp 437 >nul 2>&1
+
+:W_12
+
+set YEAR=%date:~0,4%
+set MONTH=%date:~5,2%
+set DAY=%date:~8,2%
+
+set OUTPUT_DIRECTORY=C:\INSPECT\%YEAR%_%MONTH%_%DAY%_INSPECTION\
+set OUTPUT_FILE=%OUTPUT_DIRECTORY%INSPECTION_OUTPUT.txt
+set DETAIL_FILE=%OUTPUT_DIRECTORY%W_12.txt
+
+:: FILE EXISTENCE CHECK
+if NOT EXIST %OUTPUT_DIRECTORY% (mkdir %OUTPUT_DIRECTORY%)
+echo. >> %DETAIL_FILE%
+echo :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: 			> %DETAIL_FILE%
+echo :: 							>> %DETAIL_FILE%
+echo ::  [W-12] IIS CGI Runnable Check 			>> %DETAIL_FILE% 
+echo :: 							>> %DETAIL_FILE%
+echo ::  Check IIS's Scripts folders to restrict CGI from EVERYONE	>> %DETAIL_FILE%
+echo ::							>> %DETAIL_FILE%
+echo ::  PASS : Script folders not EXIST or EVERYONE 		>> %DETAIL_FILE%
+echo ::           AUTHORITY is not EXIST			>> %DETAIL_FILE%
+echo ::							>> %DETAIL_FILE%
+echo ::                                                                       	>> %DETAIL_FILE%
+echo ::							>> %DETAIL_FILE%
+echo ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::			>> %DETAIL_FILE%
+echo. 							>> %DETAIL_FILE%
+
+cd C:\inetpub\scripts >nul 2>&1
+
+set result=W-12 = PASS
+
+if %errorlevel% EQU 1 (goto W_12_FINISH)
+cd C:\inetpub >nul 2>&1
+icacls scripts | find /i "EVERYONE" >nul 2>&1
+
+if %errorlevel% EQU 0 (
+  set result=W-12 = FAIL
+  echo IIS Scripts is allow Everyone >> %DETAIL_FILE%
+) else (
+  echo IIS Scripts is restrict Everyone >> %DETAIL_FILE%
+)
+
+:W_12_FINISH
+
+echo %result%
+echo %result% >> %OUTPUT_FILE%
+
+:FINISH
+pause >nul 2>&1
