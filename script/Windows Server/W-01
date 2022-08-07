@@ -1,4 +1,6 @@
 @echo off
+@REM W-01 (상) Administrator 계정 이름 변경 및 보안성 강화
+
 chcp 437 >nul 2>&1
 :W_01
 set YEAR=%date:~0,4%
