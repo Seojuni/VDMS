@@ -1,7 +1,7 @@
 @echo off
 chcp 437 >nul 2>&1
 
-:W_12
+: [W-12] (상) 2. 서비스 관리 > 2.6 IIS CGI 실행 제한
 
 set YEAR=%date:~0,4%
 set MONTH=%date:~5,2%
