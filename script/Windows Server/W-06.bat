@@ -1,7 +1,7 @@
 @echo off
 chcp 437 >nul 2>&1
 
-:W_06
+: [W-06] (상) 1. 계정관리 > 1.6 관리자 그룹에 최소한의 사용자 포함
 
 set YEAR=%date:~0,4%
 set MONTH=%date:~5,2%
