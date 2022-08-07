@@ -1,8 +1,8 @@
 @echo off
-REM [W-01] (상) 1. 계정관리 > 1.1 Administrator 계정 이름 변경 또는 보안성 강화
-
 chcp 437 >nul 2>&1
-:W_01
+
+: [W-01] (상) 1. 계정관리 > 1.1 Administrator 계정 이름 변경 또는 보안성 강화
+
 set YEAR=%date:~0,4%
 set MONTH=%date:~5,2%
 set DAY=%date:~8,2%
