@@ -8,7 +8,7 @@ TYPE LocalSecurityPolicy.txt | find -i "REMOTE_PROCEDURE" >> remote.txt
 
 IF %REMOTE_PROCEDURE% NEQ 1 (
     ECHO PC-19 1 >> result.txt
-)ELSE(
+) ELSE (
     ECHO PC-19 2 >> resuilt.txt
 )
 
