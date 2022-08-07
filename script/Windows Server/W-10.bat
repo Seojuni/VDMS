@@ -1,7 +1,7 @@
 @echo off
 chcp 437 >nul 2>&1
 
-:W_10
+: [W-10] (상) 2. 서비스 관리 > 2.4 IIS 서비스 구동 점검
 
 set YEAR=%date:~0,4%
 set MONTH=%date:~5,2%
