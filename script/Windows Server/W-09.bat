@@ -1,7 +1,7 @@
 @echo off
 chcp 437 >nul 2>&1
 
-:W_06
+: [W-09] (상) 2. 서비스 관리 > 2.3 불필요한 서비스 제거
 
 set YEAR=%date:~0,4%
 set MONTH=%date:~5,2%
