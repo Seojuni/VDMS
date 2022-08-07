@@ -1,0 +1,52 @@
+@echo off
+chcp 437 >nul 2>&1
+
+:W_07
+
+set YEAR=%date:~0,4%
+set MONTH=%date:~5,2%
+set DAY=%date:~8,2%
+
+set OUTPUT_DIRECTORY=C:\INSPECT\%YEAR%_%MONTH%_%DAY%_INSPECTION\
+set OUTPUT_FILE=%OUTPUT_DIRECTORY%INSPECTION_OUTPUT.txt
+set DETAIL_FILE=%OUTPUT_DIRECTORY%W_07.txt
+
+:: FILE EXISTENCE CHECK
+if NOT EXIST %OUTPUT_DIRECTORY% (mkdir %OUTPUT_DIRECTORY%)
+echo. >> %DETAIL_FILE%
+echo :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: 			> %DETAIL_FILE%
+echo :: 							>> %DETAIL_FILE%
+echo ::  [W-07] Share File System Check 			>> %DETAIL_FILE% 
+echo :: 							>> %DETAIL_FILE%
+echo ::  Inspect Everyone Share is configured at  		>> %DETAIL_FILE%
+echo ::  more than default share Drive	 			>> %DETAIL_FILE%
+echo ::							>> %DETAIL_FILE%
+echo ::  RESULT : Always "Need Review"			>> %DETAIL_FILE%
+echo ::							>> %DETAIL_FILE%
+echo ::                                                                       	>> %DETAIL_FILE%
+echo ::							>> %DETAIL_FILE%
+echo ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::			>> %DETAIL_FILE%
+echo. 							>> %DETAIL_FILE%
+
+net share > %OUTPUT_DIRECTORY%tmp_w_07.txt
+
+echo SHARE FILE LIST : >> %DETAIL_FILE%
+type %OUTPUT_DIRECTORY%tmp_w_07.txt >> %DETAIL_FILE%
+echo. >> %DETAIL_FILE%
+
+for /f "skip=4 tokens=1,2 delims= " %%a in (%OUTPUT_DIRECTORY%tmp_w_07.txt) do (
+  echo --------------------------------------------- >>%DETAIL_FILE%
+  echo. >> %DETAIL_FILE%
+  echo %%a authority list : >> %DETAIL_FILE%
+  icacls %%b >>%DETAIL_FILE% 2>nul
+  echo. >> %DETAIL_FILE%
+) 
+set result=W-07 = Need Review
+
+echo %result%
+echo %result% >> %OUTPUT_FILE%
+
+if EXIST %OUTPUT_DIRECTORY%tmp_w_07.txt (del %OUTPUT_DIRECTORY%tmp_w_07.txt)
+
+:FINISH
+pause >nul 2>&1
