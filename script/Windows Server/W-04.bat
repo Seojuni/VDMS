@@ -1,7 +1,7 @@
 @echo off
 chcp 437 >nul 2>&1
 
-:W_04
+: [W-04] (상) 1. 계정관리 > 1.4 계정 잠금 임계값 설정
 
 set YEAR=%date:~0,4%
 set MONTH=%date:~5,2%
