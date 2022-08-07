@@ -1,7 +1,7 @@
 @echo off
 chcp 437 >nul 2>&1
 
-:W_07
+: [W-07] (상) 2. 서비스 관리 > 2.1 공유 권한 및 사용자 그룹 설정
 
 set YEAR=%date:~0,4%
 set MONTH=%date:~5,2%
