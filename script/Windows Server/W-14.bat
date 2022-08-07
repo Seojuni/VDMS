@@ -1,7 +1,7 @@
 @echo off
 chcp 437 >nul 2>&1
 
-:W_14
+: [W-14] (상) 2. 서비스 관리 > 2.8 IIS 불필요한 파일 제거
 
 set YEAR=%date:~0,4%
 set MONTH=%date:~5,2%
