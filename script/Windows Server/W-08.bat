@@ -1,7 +1,7 @@
 @echo off
 chcp 437 >nul 2>&1
 
-:W_08
+: [W-08] (상) 2. 서비스 관리 > 2.2 하드디스크 기본 공유 제거
 
 set YEAR=%date:~0,4%
 set MONTH=%date:~5,2%
