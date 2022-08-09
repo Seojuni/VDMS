@@ -13,6 +13,9 @@ from datetime import datetime
 
 import platform
 
+import subprocess
+
+
 
 my_os=platform.system()
 
@@ -50,7 +53,10 @@ root.columnconfigure(0, weight=1)
 # create a treeview
 tree = CheckboxTreeview(root)
 tree.grid()
-
+       
+#def select_item():
+    
+    
 
 
 
@@ -206,24 +212,74 @@ elif my_os=="Mac":
             tree.move(i, 3, j)
 
 
+
     
 
 list_frame=Frame(root)
 filename=str(day)+'.txt'
+
+#해당 py파일이 존재해야 오류안남
 def saveFile():
     file=open(filename,"w")
-    ts="가나다"
-    #ts=str(list_file.get(0,END))
-    file.write(ts)
-    file.close
-    msbox.showinfo("알림", "저장되었습니다")
+    
+    selected=tree.focus()
+    temp=tree.item(selected,'values')
+    
+
+    if my_os=="Windows":
+        if (selected=='0'):
+            for i in range(6, 24): #앞에 0이 붙어야하는데
+                subprocess.call([r'C:\Users\USER\Desktop\script\Windows PC\PC-'+str(i).zfill(2)+'.bat'])
+                #print('C:UsersUSEResktopscriptindows PCPC-' + str(i).zfill(2) + '.bat')#파일출력 확인
+        elif (selected=='1'):
+            for i in range(24, 60):
+                subprocess.call([r'C:\Users\USER\Desktop\script\Windows PC\PC-'+str(i)+'.bat'])
+        elif (selected=='2'):
+            for i in range(60, 63):
+                subprocess.call([r'C:\Users\USER\Desktop\script\Windows PC\PC-'+str(i)+'.bat'])
+        elif (selected=='3'):
+            for i in range(63, 67):
+                subprocess.call([r'C:\Users\USER\Desktop\script\Windows PC\PC-'+str(i)+'.bat'])
+        elif (selected=='4'):
+            for i in range(67, 87):
+                subprocess.call([r'C:\Users\USER\Desktop\script\Windows PC\PC-'+str(i)+'.bat'])
+        elif (selected=='5'):
+            subprocess.call([r'C:\Users\USER\Desktop\script\Windows PC\PC-'+str(i)+'.bat'])#sub 파일 open
+        else: #위에는 부모선택 시 자녀 파일 오픈 해당 부분은 선택한 부분만 open
+            subprocess.call([r'C:\Users\USER\Desktop\script\Windows PC\PC-'+str(selected).zfill(2)+'.bat'])
+            #print('C:UsersUSERDesktopcriptindows PCPC-'+str(i).zfill(2)+'.bat') #파일출력 확인
+        
+    elif my_os=="Mac":
+        if (selected=='0'):
+            for i in range(6, 24):
+                subprocess.call([r'C:\Users\USER\Desktop\script\Windows PC\PC-'+str(i).zfill(2)+'.bat'])
+        elif (selected=='1'):
+            for i in range(24, 60):
+                subprocess.call([r'C:\Users\USER\Desktop\script\Windows PC\PC-'+str(i)+'.bat'])
+        elif (selected=='2'):
+            for i in range(60, 63):
+                subprocess.call([r'C:\Users\USER\Desktop\script\Windows PC\PC-'+str(i)+'.bat'])
+        elif (selected=='3'):
+            for i in range(63, 83):
+                subprocess.call([r'C:\Users\USER\Desktop\script\Windows PC\PC-'+str(i)+'.bat'])
+        else: #위에는 부모선택 시 자녀 파일 오픈 해당 부분은 선택한 부분만 open
+            subprocess.call([r'C:\Users\USER\Desktop\script\Windows PC\PC-'+str(selected).zfill(2)+'.bat'])
+    
+    
+    
+        
 
 
 btn1=Button(root, text='start', command=saveFile)
 btn1.grid(row=1, column=0)
+
+
 
 # place the Treeview widget on the root window
 tree.grid(row=0, column=0, sticky='nsew')
 
 # run the app
 root.mainloop()
+
+
+
