@@ -9,3 +9,8 @@ Pillow==9.2.0
 lxml==4.9.1
 python-docx==0.8.11
 PyPDF2==2.9.0
+fonttools==4.34.4
+cycler==0.11.0
+kiwisolver==1.4.4
+matplotlib==3.5.2
+numpy==1.23.1
