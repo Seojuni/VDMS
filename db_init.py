@@ -28,8 +28,8 @@ try:
     conn.commit()
 
     cur.execute("""create table diagnostic_results(
-        type_code VARCHAR(5),
-        result VARCHAR(1));""")
+        type_code VARCHAR(5) NOT NULL PRIMARY KEY,
+        result VARCHAR(1) NOT NULL);""")
     conn.commit()
 except mariadb.Error as e:
     print(f"Error: {e}")
