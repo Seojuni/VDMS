@@ -59,15 +59,20 @@ class App():
                             print(f"Error: {e}")
                     else:
                         try:
-                            print('no')
                             self.cur.execute(update_query, ('0', None, software[0]))
                             self.conn.commit()
                         except mariadb.Error as e:
                             print(f"Error: {e}")
-
+                else:
+                    try:
+                        self.cur.execute(update_query, ('0', None, software[0]))
+                        self.conn.commit()
+                    except mariadb.Error as e:
+                        print(f"Error: {e}")
 
 if __name__ == "__main__":
     app = App()
 
     app.get_software_list()
     app.vuln_comparison()
+
