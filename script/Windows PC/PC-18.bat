@@ -14,3 +14,4 @@ IF %EMPTY_FOLDER% EQU 1(
 
 DEL LocalSecurityPolicy.txt
 DEL empty.txt
+PAUSE
