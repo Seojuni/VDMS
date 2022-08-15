@@ -2,7 +2,7 @@
 
 REM[PC-19] (중) 4.보안관리 > 4.7 원격 지우너을 금지하도록 정책 설정
 
-secedit /EXPORT /CFG LocalSeurityPoilicy.txt
+secedit /EXPORT /CFG LocalSeurityPolicy.txt
 
 TYPE LocalSecurityPolicy.txt | find -i "REMOTE_PROCEDURE" >> remote.txt
 
