@@ -18,7 +18,7 @@ else (
 DEL LocalSeurityPolicy.txt
 DEL share_folder.txt
 
-pause
+
 
 
 
