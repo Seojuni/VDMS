@@ -19,7 +19,7 @@ import subprocess
 
 my_os=platform.system()
 os_rel=platform.release()
-os_rel=1
+
 
 
 #if my_os=="Darwin":
