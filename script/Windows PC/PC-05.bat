@@ -1,5 +1,6 @@
+@ECHO OFF
 REM[PC-05] (상) 2.서비스 관리 > 2.3 Windows Messenger와 같은 상용 메신저의 사용금지
-secedit /EXPORT /CFG LocalSeurityPoilicy.txt
+secedit /EXPORT /CFG LocalSeurityPolicy.txt
 
 TYPE LocalSecurityPolicy.txt | find -i "Windows_Messenger" > Messenger.txt
 TYPE LocalSecurityPolicy.txt | find -i "commercialMessengerInstallation" > CMMSN_INSTL.txt
