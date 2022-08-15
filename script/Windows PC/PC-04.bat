@@ -1,7 +1,7 @@
 @ECHO OFF
 REM[PC-04] (상) 2.서비스 관리 > 2.2 불필요한 서비스 제거
 
-secedit /EXPORT /CFG LocalSeurityPoilicy.txt
+secedit /EXPORT /CFG LocalSeurityPolicy.txt
 
 TYPE LocalSecurityPolicy.txt | find -i "Unnecessary_service" > uncecessary.txt
 
