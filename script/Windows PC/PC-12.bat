@@ -1,7 +1,7 @@
 @ECHO OFF
 REM[PC-12] (상) 4. 보안관리 > 4.4 화면보호기 대기 시간을 5~10분으로 설정 및 재시작 시 암호로 보호하도록 설정
 
-secedit /EXPORT /CFG LocalSeurityPoilicy.txt
+secedit /EXPORT /CFG LocalSeurityPolicy.txt
 TYPE LocalSecurityPolicy.txt | find -i "SCREEN_SAVER" >> windows.txt
 TYPE LocalSecurityPolicy.txt | find -i "PASSWORD_PROTECTION" >>password_protect.txt
 @ECHO OFF
