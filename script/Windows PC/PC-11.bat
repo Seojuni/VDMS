@@ -1,7 +1,7 @@
 @ECHO OFF
 REM[PC-11] (상) 4. 보안관리 > 4.3 OS에서 제공하는 침입차단 기능 활성화
 
-secedit /EXPORT /CFG LocalSeurityPoilicy.txt
+secedit /EXPORT /CFG LocalSeurityPolicy.txt
 TYPE LocalSecurityPolicy.txt | find -i "WINDOWS_FIREWALL" >> windows.txt
 TYPE LocalSecurityPolicy.txt | find -i "OTHER_FIREWALL" >>other.txt
 
