@@ -1,6 +1,6 @@
 @ECHO OFF
 rem[PC-03] (상) 2. 서비스 관리 >.3 공유 폴더 제거
-secedit /EXPORT /CFG LocalSeurityPoilicy.txt
+secedit /EXPORT /CFG LocalSecurityPolicy.txt
 
 TYPE LocalSeurityPoilicy.txt | findstr "C$ D$ Admin$" > share_folder.txt
 
@@ -15,5 +15,10 @@ else (
         ECHO PC-03 2 >> result.txt
 )
 
-DEL LocalSeurityPoilicy.txt
+DEL LocalSeurityPolicy.txt
 DEL share_folder.txt
+
+pause
+
+
+
