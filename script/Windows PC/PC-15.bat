@@ -2,7 +2,7 @@
 
 REM[PC-15] (중) 1. 계정관리 > 1.3 복구 콘솔에서 자동 로그온을 금지하도록 설정
 
-secedit /EXPORT /CFG LocalSeurityPoilicy.txt
+secedit /EXPORT /CFG LocalSeurityPolicy.txt
 TYPE LocalSecurityPolicy.txt | find -i "Recovery_Console" >> recovery.txt
 
 
