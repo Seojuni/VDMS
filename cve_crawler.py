@@ -7,7 +7,7 @@ import db_conn
 
 
 def insert_data(cur, vuln_id, pub_date, last_mod_date, description, score, software, rangeStartVersion, rangeEndVersion, cwe_id, cwe_name):
-    query = 'insert into cve_list(vuln_id, pub_date, last_mod_date, description, score, software, start_version, end_version, cwe_id, cwe_name) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    query = """insert into cve_list(vuln_id, pub_date, last_mod_date, description, score, software, start_version, end_version, cwe_id, cwe_name) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
     
     try:
         cur.execute(query, (vuln_id, pub_date, last_mod_date, description, score, software, rangeStartVersion, rangeEndVersion, cwe_id, cwe_name))
