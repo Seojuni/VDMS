@@ -19,12 +19,17 @@ try:
         cwe_name VARCHAR(100) NOT NULL);""")
     conn.commit()
 
-    cur.execute("""create table software_list (
+    cur.execute("""create table vuln_list (
         No INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
         version VARCHAR(30) NOT NULL,
-        vuln_check VARCHAR(1),
         vuln_id VARCHAR(15));""")
+    conn.commit()
+
+    cur.execute("""create table software_list (
+        No INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        version VARCHAR(30) NOT NULL);""")
     conn.commit()
 
     cur.execute("""create table diagnostic_results(
