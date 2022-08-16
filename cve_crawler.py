@@ -109,8 +109,7 @@ def get_data():
                             if rangeEndVersion[0] == '"':
                                 rangeEndVersion = rangeEndVersion[1:-1]
 
-                            if rangeStartVersion == '' and rangeEndVersion == '':
-                                # rangeStartVersion = cpe_utils.CPE(cpe_code).get_human("version")
+                            if software == '' and rangeStartVersion == '' and rangeEndVersion == '':
                                 continue
 
                             insert_data(cur, vuln_row, pub_date, last_mod_date, description, score, software,
