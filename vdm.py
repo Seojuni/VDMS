@@ -568,7 +568,7 @@ class App(customtkinter.CTk):
         # save diagnostic result
         insert_query = 'insert into diagnostic_results(type_code, result) values (?, ?)'
 
-        f = open("C:\\Users\\USER\\Desktop\\vdm\\script\\Windows PC\\result.txt", 'r')
+        f = open("C:\\Users\\USER\\Desktop\\vdm\\script\\" + self.my_os + "\\result.txt", 'r')
 
         lines = f.readlines()
         for line in lines:
@@ -582,7 +582,7 @@ class App(customtkinter.CTk):
                 print(f"Error: {e}")
 
         f.close()
-        os.remove("C:\\Users\\USER\\Desktop\\vdm\\script\\Windows PC\\result.txt")
+        os.remove("C:\\Users\\USER\\Desktop\\vdm\\script\\" + self.my_os + "\\result.txt")
 
         # create pie chart
         select_query = 'select * from diagnostic_results'
@@ -592,10 +592,22 @@ class App(customtkinter.CTk):
         pc_categorie2 = ['PC-03', 'PC-04', 'PC-05', 'PC-16', 'PC-17', 'PC-18']
         pc_categorie3 = ['PC-06', 'PC-07', 'PC-08']
         pc_categorie4 = ['PC-09', 'PC-10', 'PC-11', 'PC-12', 'PC-13', 'PC-14', 'PC-19']
+        server_categorie1 = ['W-01', 'W-02', 'W-03', 'W-04', 'W-05', 'W-06', 'W-46', 'W-47', 'W-48', 'W-49', 'W-50', 'W-51',
+                             'W-52', 'W-53', 'W-54', 'W-55', 'W-56', 'W-57']
+        server_categorie2 = ['W-07', 'W-08', 'W-09', 'W-10', 'W-11', 'W-12', 'W-13', 'W-14', 'W-15', 'W-16', 'W-17', 'W-18',
+                             'W-19', 'W-20', 'W-21', 'W-22', 'W-23', 'W-24', 'W-25', 'W-26', 'W-27', 'W-28', 'W-29', 'W-30',
+                             'W-31', 'W-58', 'W-59', 'W-60', 'W-61', 'W-62', 'W-63', 'W-64', 'W-65', 'W-66', 'W-67', 'W-68']
+        server_categorie3 = ['W-32', 'W-33', 'W-69']
+        server_categorie4 = ['W-34', 'W-35', 'W-70', 'W-71']
+        server_categorie5 = ['W-36', 'W-37', 'W-38', 'W-39', 'W-40', 'W-41', 'W-42', 'W-43', 'W-44', 'W-45', 'W-72', 'W-73',
+                             'W-74', 'W-75', 'W-76', 'W-77', 'W-78', 'W-79', 'W-80', 'W-81']
+        server_categorie6 = ['W-82']
         c1_cnt = 0
         c2_cnt = 0
         c3_cnt = 0
         c4_cnt = 0
+        c5_cnt = 0
+        c6_cnt = 0
 
         try:
             cur.execute(select_query)
@@ -617,7 +629,21 @@ class App(customtkinter.CTk):
                     elif row[0] in pc_categorie4:
                         c4_cnt += 1
             if 'W' in row[0]:
-                print('Server')
+                total_cnt += 1
+                if row[1] == '2':
+                    vuln_list.append(row[0])
+                    if row[0] in server_categorie1:
+                        c1_cnt += 1
+                    elif row[0] in server_categorie2:
+                        c2_cnt += 1
+                    elif row[0] in server_categorie3:
+                        c3_cnt += 1
+                    elif row[0] in server_categorie4:
+                        c4_cnt += 1
+                    elif row[0] in server_categorie5:
+                        c5_cnt += 1
+                    elif row[0] in server_categorie6:
+                        c6_cnt += 1
 
         font_path = "C:/Windows/Fonts/NGULIM.TTF"
         font = font_manager.FontProperties(fname=font_path).get_name()
@@ -637,12 +663,20 @@ class App(customtkinter.CTk):
 
         plt.clf()
 
-        ratio = [c1_cnt, c2_cnt, c3_cnt, c4_cnt]
-        labels = ['계정 관리', '서비스 관리', '패치 관리', '보안 관리']
-        explode = [0.05, 0.05, 0.05, 0.05]
+        if self.my_os == "Windows PC":
+            ratio = [c1_cnt, c2_cnt, c3_cnt, c4_cnt]
+            labels = ['계정 관리', '서비스 관리', '패치 관리', '보안 관리']
+            explode = [0.05, 0.05, 0.05, 0.05]
 
-        plt.pie(ratio, labels=labels, autopct='%.1f%%', explode=explode)
-        plt.savefig('pie2.png')
+            plt.pie(ratio, labels=labels, autopct='%.1f%%', explode=explode)
+            plt.savefig('pie2.png')
+        elif self.my_os == "Windows Server":
+            ratio = [c1_cnt, c2_cnt, c3_cnt, c4_cnt, c5_cnt, c6_cnt]
+            labels = ['계정 관리', '서비스 관리', '패치 관리', '로그 관리', '보안 관리', 'DB 관리']
+            explode = [0.05, 0.05, 0.05, 0.05, 0.05, 0.05]
+
+            plt.pie(ratio, labels=labels, autopct='%.1f%%', explode=explode)
+            plt.savefig('pie2.png')
 
         # create report cover
         doc = Document()
@@ -656,7 +690,7 @@ class App(customtkinter.CTk):
         first_row[1].text = socket.gethostname()
         second_row = table.rows[1].cells
         second_row[0].text = '대상 운영체제'
-        second_row[1].text = self.get_os()
+        second_row[1].text = self.my_os
         third_row = table.rows[2].cells
         third_row[0].text = '점검 시각'
         third_row[1].text = self.digdate
@@ -709,14 +743,13 @@ class App(customtkinter.CTk):
 
         merger.append(outputFile)
         for vuln in vuln_list:
-            merger.append("C:\\Users\\USER\\Desktop\\vdm\\Report Source\\Windows PC\\" + vuln + ".pdf")
+            merger.append("C:\\Users\\USER\\Desktop\\vdm\\Report Source\\" + self.my_os + "\\" + vuln + ".pdf")
 
         merger.write("C:\\Users\\USER\\Desktop\\Report.pdf")
         merger.close()
 
         os.remove(outputFile)
 
-        conn = db_conn.db_conn()
         tkinter.messagebox.showinfo("Save", "보고서가 저장되었습니다.")
 
     def change_appearance_mode(self, new_appearance_mode):
