@@ -4,6 +4,16 @@ import db_conn
 import mariadb
 
 
+def init_table(conn, cur):
+    delete_query = """delete from software_list"""
+
+    try:
+        cur.execute(delete_query)
+        conn.commit()
+    except mariadb.Error as e:
+        print(f"Error: {e}")
+
+
 def software_listing():
     f = open('output.txt', 'w')
     cmd = ['powershell.exe', 'Get-CimInstance', 'Win32_Product', '|', 'Sort-Object', '-property', 'Name', '|',
@@ -14,8 +24,8 @@ def software_listing():
 
 
 def update_data(conn, cur):
-    insert_query = 'insert into software_list(name, version) values (?, ?)'
-    select_query = 'select count(*) from software_list'
+    insert_query = """insert into software_list(name, version) values (?, ?)"""
+    select_query = """select count(*) from software_list"""
 
     f = open('output.txt', 'r')
     line = f.readlines()
@@ -63,6 +73,7 @@ if __name__ == "__main__":
     conn = db_conn.db_conn()
     cur = conn.cursor()
 
+    init_table(conn, cur)
     software_listing()
     update_data(conn, cur)
 
