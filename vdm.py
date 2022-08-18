@@ -1,6 +1,13 @@
-import tkinter
+from tkinter import *
 import tkinter.messagebox
 import customtkinter
+import db_conn
+import db_init
+import mariadb
+
+# dashboard
+from PIL import Image, ImageTk
+import create_dashboard_source as ds
 
 # vulnerability diagnosis
 from ttkwidgets import CheckboxTreeview
@@ -8,14 +15,11 @@ from tkinter import ttk
 import datetime
 import winreg as reg
 import subprocess
-import time
 
 # create report
 from docx import Document
 from docx.shared import Cm, Pt, RGBColor
 import socket
-import mariadb
-import db_conn
 import matplotlib.pyplot as plt
 from matplotlib import font_manager, rc
 from docx2pdf import convert
@@ -29,6 +33,7 @@ import webbrowser
 import threading
 import schedule
 
+
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
@@ -39,6 +44,9 @@ class App(customtkinter.CTk):
 
     def __init__(self):
         super().__init__()
+
+        db_conn.db_conn()
+        db_init.db_init()
 
         self.title("VDM.py")
         self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
@@ -57,18 +65,18 @@ class App(customtkinter.CTk):
         self.frame_right.grid(row=0, column=1, sticky="nswe", padx=20, pady=20)
 
         # ============ frame_left ============
-        self.frame_left.grid_rowconfigure(0, minsize=10)   # empty row with minsize as spacing
-        self.frame_left.grid_rowconfigure(7, weight=1)  # empty row as spacing
-        self.frame_left.grid_rowconfigure(8, minsize=20)    # empty row with minsize as spacing
-        self.frame_left.grid_rowconfigure(11, minsize=10)  # empty row with minsize as spacing
+        self.frame_left.grid_rowconfigure(0, minsize=10)
+        self.frame_left.grid_rowconfigure(7, weight=1)
+        self.frame_left.grid_rowconfigure(8, minsize=20)
+        self.frame_left.grid_rowconfigure(11, minsize=10)
 
         self.label_1 = customtkinter.CTkLabel(master=self.frame_left,
                                               text="Vulnerability Diagnosis",
-                                              text_font=("Roboto Medium", -16))  # font name and size in px
+                                              text_font=("Roboto Medium", -16))
         self.label_1.grid(row=1, column=0, pady=0, padx=0)
         self.label_2 = customtkinter.CTkLabel(master=self.frame_left,
                                               text="and Management",
-                                              text_font=("Roboto Medium", -16))  # font name and size in px
+                                              text_font=("Roboto Medium", -16))
         self.label_2.grid(row=2, column=0, pady=10, padx=10)
 
         self.button_1 = customtkinter.CTkButton(master=self.frame_left,
@@ -101,22 +109,107 @@ class App(customtkinter.CTk):
 
         # ============ frame_right ============
         self.frame_right.rowconfigure((0), weight=1)
-        #self.frame_right.rowconfigure(7, weight=10)
         self.frame_right.columnconfigure((0), weight=1)
-        #self.frame_right.columnconfigure(2, weight=0)
 
         self.frame_main = customtkinter.CTkFrame(master=self.frame_right)
         self.frame_main.grid(row=0, column=0, sticky="nsew")
+        self.frame_main.rowconfigure(2, weight=1)
+        self.frame_main.columnconfigure(3, weight=1)
 
-        self.frame_main.rowconfigure(0, weight=1)
-        self.frame_main.columnconfigure(0, weight=1)
-        self.label_info = customtkinter.CTkLabel(master=self.frame_main,
-                                                   text="Main Frame",
-                                                   height=100,
-                                                   corner_radius=6,  # <- custom corner radius
-                                                   fg_color=("white", "gray38"),  # <- custom tuple-color
-                                                   justify=tkinter.LEFT)
-        self.label_info.grid(column=0, row=0, sticky="nwe", padx=15, pady=15)
+        # create dashboard source
+        self.dashboard = ds.create_dashboard_source()
+        self.dashboard.cwe_chart()
+        self.dashboard.vuln_chart()
+        self.vuln_total = self.dashboard.get_vuln_software_total()
+        self.software_total = self.dashboard.get_installed_software_total()
+        self.cve_total = self.dashboard.get_cve_total()
+
+        self.dashboardImage1 = Image.open('resources\\chart1.png')
+        photo = ImageTk.PhotoImage(self.dashboardImage1)
+        self.dashboard1 = customtkinter.CTkLabel(master=self.frame_main,
+                                                 width=660,
+                                                 height=330,
+                                                 image=photo,
+                                                 corner_radius=6,
+                                                 fg_color=("white", "white"),
+                                                 justify=tkinter.LEFT)
+        self.dashboard1.image = photo
+        self.dashboard1.grid(column=0, row=0, columnspan=2, sticky="nwe", padx=10, pady=15)
+        self.dashboard1_title = customtkinter.CTkLabel(master=self.frame_main,
+                                                      text="CWE 유형 Top 10",
+                                                      text_font=("", 13, "bold"),
+                                                      text_color="gray38",
+                                                      fg_color=("white", "white"))
+        self.dashboard1_title.place(x=20, y=15)
+
+        self.dashboardImage2 = Image.open('resources\\chart2.png')
+        photo = ImageTk.PhotoImage(self.dashboardImage2)
+        self.dashboard2 = customtkinter.CTkLabel(master=self.frame_main,
+                                                 width=330,
+                                                 height=330,
+                                                 image=photo,
+                                                 corner_radius=6,
+                                                 fg_color=("white", "white"),
+                                                 justify=tkinter.LEFT)
+        self.dashboard2.image = photo
+        self.dashboard2.grid(column=2, row=0, sticky="nwe", padx=10, pady=15)
+        self.dashboard2_title = customtkinter.CTkLabel(master=self.frame_main,
+                                                       text="취약점 점검 결과",
+                                                       text_font=("", 13, "bold"),
+                                                       text_color="gray38",
+                                                       fg_color=("white", "white"))
+        self.dashboard2_title.place(x=710, y=15)
+
+        self.vuln_software_label = customtkinter.CTkLabel(master=self.frame_main,
+                                                          text=self.vuln_total + "개",
+                                                          width=330,
+                                                          height=330,
+                                                          text_font=("", 25,"bold"),
+                                                          text_color="gray38",
+                                                          corner_radius=6,
+                                                          fg_color=("#E26365", "#E26365"),
+                                                          justify=tkinter.LEFT)
+        self.vuln_software_label.grid(column=0, row=1, sticky="nwe", padx=10, pady=5)
+        self.vuln_software_title = customtkinter.CTkLabel(master=self.frame_main,
+                                                          text="취약한 소프트웨어 버전",
+                                                          text_font=("", 13, "bold"),
+                                                          text_color="gray38",
+                                                          fg_color=("#E26365", "#E26365"))
+        self.vuln_software_title.place(x=25, y=380)
+
+        self.installed_software_label = customtkinter.CTkLabel(master=self.frame_main,
+                                                               text=self.software_total + "개",
+                                                               width=330,
+                                                               height=330,
+                                                               text_font=("", 25, "bold"),
+                                                               text_color="gray38",
+                                                               corner_radius=6,
+                                                               fg_color=("#00BAC7", "#00BAC7"),
+                                                               justify=tkinter.LEFT)
+        self.installed_software_label.grid(column=1, row=1, sticky="nwe", padx=5, pady=5)
+        self.installed_software_title = customtkinter.CTkLabel(master=self.frame_main,
+                                                               text="설치되어 있는 소프트웨어",
+                                                               text_font=("", 13, "bold"),
+                                                               text_color="gray38",
+                                                               fg_color=("#00BAC7", "#00BAC7"))
+        self.installed_software_title.place(x=370, y=380)
+
+        self.cve_count_label = customtkinter.CTkLabel(master=self.frame_main,
+                                                      text=self.cve_total + "개",
+                                                      width=330,
+                                                      height=330,
+                                                      text_font=("", 25, "bold"),
+                                                      text_color="gray38",
+                                                      corner_radius=6,
+                                                      fg_color=("#F0BF1D", "#F0BF1D"),
+                                                      justify=tkinter.LEFT)
+        self.cve_count_label.grid(column=2, row=1, sticky="nwe", padx=10, pady=5)
+        self.cve_count_title = customtkinter.CTkLabel(master=self.frame_main,
+                                                      text="검색 가능한 CVE Data",
+                                                      text_font=("", 13, "bold"),
+                                                      text_color="gray38",
+                                                      fg_color=("#F0BF1D", "#F0BF1D"))
+        self.cve_count_title.place(x=720, y=380)
 
         cve_crawler = threading.Thread(target=self.cve_crawler)
         cve_crawler.start()
@@ -471,16 +564,102 @@ class App(customtkinter.CTk):
     def three_button_event(self):
         self.frame_main = customtkinter.CTkFrame(master=self.frame_right)
         self.frame_main.grid(row=0, column=0, sticky="nsew")
+        self.frame_main.rowconfigure(2, weight=1)
+        self.frame_main.columnconfigure(3, weight=1)
 
-        self.frame_main.rowconfigure(0, weight=1)
-        self.frame_main.columnconfigure(0, weight=1)
-        self.label_info = customtkinter.CTkLabel(master=self.frame_main,
-                                                 text="Main Frame",
-                                                 height=100,
-                                                 corner_radius=6,  # <- custom corner radius
-                                                 fg_color=("white", "gray38"),  # <- custom tuple-color
+        self.dashboard = ds.create_dashboard_source()
+        self.dashboard.cwe_chart()
+        self.dashboard.vuln_chart()
+        self.vuln_total = self.dashboard.get_vuln_software_total()
+        self.software_total = self.dashboard.get_installed_software_total()
+        self.cve_total = self.dashboard.get_cve_total()
+
+        self.dashboardImage1 = Image.open('resources\\chart1.png')
+        photo = ImageTk.PhotoImage(self.dashboardImage1)
+        self.dashboard1 = customtkinter.CTkLabel(master=self.frame_main,
+                                                 width=660,
+                                                 height=330,
+                                                 image=photo,
+                                                 corner_radius=6,
+                                                 fg_color=("white", "white"),
                                                  justify=tkinter.LEFT)
-        self.label_info.grid(column=0, row=0, sticky="nwe", padx=15, pady=15)
+        self.dashboard1.image = photo
+        self.dashboard1.grid(column=0, row=0, columnspan=2, sticky="nwe", padx=10, pady=15)
+        self.dashboard1_title = customtkinter.CTkLabel(master=self.frame_main,
+                                                       text="CWE 유형 Top 10",
+                                                       text_font=("", 13, "bold"),
+                                                       text_color="gray38",
+                                                       fg_color=("white", "white"))
+        self.dashboard1_title.place(x=20, y=15)
+
+        self.dashboardImage2 = Image.open('resources\\chart2.png')
+        photo = ImageTk.PhotoImage(self.dashboardImage2)
+        self.dashboard2 = customtkinter.CTkLabel(master=self.frame_main,
+                                                 width=330,
+                                                 height=330,
+                                                 image=photo,
+                                                 corner_radius=6,
+                                                 fg_color=("white", "white"),
+                                                 justify=tkinter.LEFT)
+        self.dashboard2.image = photo
+        self.dashboard2.grid(column=2, row=0, sticky="nwe", padx=10, pady=15)
+        self.dashboard2_title = customtkinter.CTkLabel(master=self.frame_main,
+                                                       text="취약점 점검 결과",
+                                                       text_font=("", 13, "bold"),
+                                                       text_color="gray38",
+                                                       fg_color=("white", "white"))
+        self.dashboard2_title.place(x=710, y=15)
+
+        self.vuln_software_label = customtkinter.CTkLabel(master=self.frame_main,
+                                                          text=self.vuln_total + "개",
+                                                          width=330,
+                                                          height=330,
+                                                          text_font=("", 25, "bold"),
+                                                          text_color="gray38",
+                                                          corner_radius=6,
+                                                          fg_color=("#e21f26", "#e21f26"),
+                                                          justify=tkinter.LEFT)
+        self.vuln_software_label.grid(column=0, row=1, sticky="nwe", padx=10, pady=5)
+        self.vuln_software_title = customtkinter.CTkLabel(master=self.frame_main,
+                                                          text="취약한 소프트웨어 버전",
+                                                          text_font=("", 13, "bold"),
+                                                          text_color="gray38",
+                                                          fg_color=("#e21f26", "#e21f26"))
+        self.vuln_software_title.place(x=25, y=380)
+
+        self.installed_software_label = customtkinter.CTkLabel(master=self.frame_main,
+                                                               text=self.software_total + "개",
+                                                               width=330,
+                                                               height=330,
+                                                               text_font=("", 25, "bold"),
+                                                               text_color="gray38",
+                                                               corner_radius=6,
+                                                               fg_color=("#009aa5", "#009aa5"),
+                                                               justify=tkinter.LEFT)
+        self.installed_software_label.grid(column=1, row=1, sticky="nwe", padx=5, pady=5)
+        self.installed_software_title = customtkinter.CTkLabel(master=self.frame_main,
+                                                               text="설치되어 있는 소프트웨어",
+                                                               text_font=("", 13, "bold"),
+                                                               text_color="gray38",
+                                                               fg_color=("#009aa5", "#009aa5"))
+        self.installed_software_title.place(x=370, y=380)
+
+        self.cve_count_label = customtkinter.CTkLabel(master=self.frame_main,
+                                                      text=self.cve_total + "개",
+                                                      width=330,
+                                                      height=330,
+                                                      text_font=("", 25, "bold"),
+                                                      text_color="gray38",
+                                                      corner_radius=6,
+                                                      fg_color=("#ffcb1f", "#ffcb1f"),
+                                                      justify=tkinter.LEFT)
+        self.cve_count_label.grid(column=2, row=1, sticky="nwe", padx=10, pady=5)
+        self.cve_count_title = customtkinter.CTkLabel(master=self.frame_main,
+                                                      text="검색 가능한 CVE Data",
+                                                      text_font=("", 13, "bold"),
+                                                      text_color="gray38",
+                                                      fg_color=("#ffcb1f", "#ffcb1f"))
+        self.cve_count_title.place(x=720, y=380)
 
     def get_os(self):
         key = reg.HKEY_LOCAL_MACHINE
