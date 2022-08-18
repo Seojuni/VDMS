@@ -7,7 +7,7 @@ TYPE LocalSecurityPolicy.txt | find -i "Windows_Messenger" > Messenger.txt
 TYPE LocalSecurityPolicy.txt | find -i "commercialMessengerInstallation" > CMMSN_INSTL.txt
 
 rem 1 : 양호 /2: 취약
-If %Windows_Messenger% NEQ 1(
+If %Windows_Messenger% NEQ 1 (
         IF %commercialMessengerInstallation% NEQ 1 (
                 ECHO PC-05 1 >> result.txt
         ) ELSE (
