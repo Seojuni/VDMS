@@ -6,6 +6,7 @@ secedit /EXPORT /CFG LocalSecurityPolicy.txt
 TYPE LocalSecurityPolicy.txt | find -i "LATEST_SERVICES" > lastes.txt
 TYPE LocalSecurityPolicy.txt | find -i "managementProcedure" > manage_pro.txt
 
+rem 1 : 양호 / 2 : 취약
 IF %LATEST_SERVICES% EQU 1 (
     IF %managementProcedure% EQU 1 (
         ECHO PC-07 1 >> result.txt
