@@ -32,7 +32,7 @@ import webbrowser
 # cve crawler
 import threading
 import schedule
-
+import time
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -722,8 +722,9 @@ class App(customtkinter.CTk):
         for item in selected:
             self.append_log('Start diagnosing the ' + item[1:-1])
 
-            subprocess.call(['C:\\Users\\USER\\Desktop\\vdm\\script\\' + self.my_os + '\\' + item[1:-1] + '.bat'])
-            #print('C:\\Users\\USER\\Desktop\\vdm\\script\\' + self.my_os + '\\' + item[1:-1] + '.bat')
+            #subprocess.call(['C:\\Users\\USER\\Desktop\\vdm\\script\\' + self.my_os + '\\' + item[1:-1] + '.bat'])
+            print('C:\\Users\\USER\\Desktop\\vdm\\script\\' + self.my_os + '\\' + item[1:-1] + '.bat')
+            #time.sleep(1)
 
             self.progressbar.set((selected.index(item)+1) / len(selected) * 1.0)
             self.append_log(item[1:-1] + ' has been diagnosed.')
@@ -744,22 +745,26 @@ class App(customtkinter.CTk):
         conn = db_conn.db_conn()
         cur = conn.cursor()
 
+        delete_query = """delete from diagnostic_results"""
+        try:
+            cur.execute(delete_query)
+            conn.commit()
+        except mariadb.Error as e:
+            print(f"Error: {e}")
+
         # save diagnostic result
         insert_query = 'insert into diagnostic_results(type_code, result) values (?, ?)'
 
         f = open("C:\\Users\\USER\\Desktop\\vdm\\script\\" + self.my_os + "\\result.txt", 'r')
-
         lines = f.readlines()
         for line in lines:
             type_code = line.strip().split(' ')[0]
             result = line.strip().split(' ')[1]
-
             try:
                 cur.execute(insert_query, (type_code, result))
                 conn.commit()
             except mariadb.Error as e:
                 print(f"Error: {e}")
-
         f.close()
         os.remove("C:\\Users\\USER\\Desktop\\vdm\\script\\" + self.my_os + "\\result.txt")
 
@@ -792,7 +797,6 @@ class App(customtkinter.CTk):
             cur.execute(select_query)
         except mariadb.Error as e:
             print(f"Error: {e}")
-
         rows = cur.fetchall()
         for row in rows:
             if 'PC' in row[0]:
@@ -830,16 +834,13 @@ class App(customtkinter.CTk):
 
         vuln_per = '%.1f' % (len(vuln_list) / total_cnt * 100.0)
         good_per = '%.1f' % (100.0 - float(vuln_per.split('%')[0]))
-
         ratio = [good_per, vuln_per]
         labels = ['양호', '취약']
         colors = ['#8fd9b6', '#ff9999']
         explode = [0.05, 0]
-
         plt.figure(figsize=(5, 5), dpi=100)
         plt.pie(ratio, labels=labels, autopct='%.1f%%', colors=colors, explode=explode)
         plt.savefig('pie1.png')
-
         plt.clf()
 
         if self.my_os == "Windows PC":
@@ -923,7 +924,6 @@ class App(customtkinter.CTk):
         merger.append(outputFile)
         for vuln in vuln_list:
             merger.append("C:\\Users\\USER\\Desktop\\vdm\\Report Source\\" + self.my_os + "\\" + vuln + ".pdf")
-
         merger.write("C:\\Users\\USER\\Desktop\\Report.pdf")
         merger.close()
 
