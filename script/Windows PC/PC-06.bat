@@ -12,6 +12,7 @@ IF %HOT_FIX% EQU 1 (
         ECHO PC-06 1 >> result.txt
     ) ELSE (
         ECHO PC-06 2 >> result.txt
+    )
 ) ELSE (
     ECHO PC-06 2 >> result.txt
 )
