@@ -205,7 +205,7 @@ class App(customtkinter.CTk):
                                                       justify=tkinter.LEFT)
         self.cve_count_label.grid(column=2, row=1, sticky="nwe", padx=10, pady=5)
         self.cve_count_title = customtkinter.CTkLabel(master=self.frame_main,
-                                                      text="검색 가능한 CVE Data",
+                                                      text="수집된 CVE Data",
                                                       text_font=("", 13, "bold"),
                                                       text_color="gray38",
                                                       fg_color=("#F0BF1D", "#F0BF1D"))
@@ -655,7 +655,7 @@ class App(customtkinter.CTk):
                                                       justify=tkinter.LEFT)
         self.cve_count_label.grid(column=2, row=1, sticky="nwe", padx=10, pady=5)
         self.cve_count_title = customtkinter.CTkLabel(master=self.frame_main,
-                                                      text="검색 가능한 CVE Data",
+                                                      text="수집된 CVE Data",
                                                       text_font=("", 13, "bold"),
                                                       text_color="gray38",
                                                       fg_color=("#ffcb1f", "#ffcb1f"))
