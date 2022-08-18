@@ -44,9 +44,9 @@ class App(customtkinter.CTk):
 
     def __init__(self):
         super().__init__()
-
         db_conn.db_conn()
         db_init.db_init()
+        os.system("pythonw -u software_listing.py > log.log 2>&1")
 
         self.title("VDM.py")
         self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
