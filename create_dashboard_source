@@ -1,0 +1,181 @@
+import mariadb
+import db_conn
+import matplotlib.pyplot as plt
+from matplotlib import font_manager, rc
+import numpy as np
+import os
+
+
+class create_dashboard_source():
+    def __init__(self):
+        super().__init__()
+        self.conn = db_conn.db_conn()
+        self.cur = self.conn.cursor()
+
+    def __del__(self):
+        self.conn.close()
+
+    def check_directory(self):
+        try:
+            if not os.path.exists('C:\\Users\\USER\\Desktop\\vdm\\resources'):
+                os.makedirs('C:\\Users\\USER\\Desktop\\vdm\\resources')
+        except OSError:
+            print('Error: Failed to create the directory.')
+
+    def cwe_chart(self):
+        # get cwe data
+        get_cwe_list_query = """select cwe_id from cve_list"""
+
+        cwe_cnt = {}
+
+        try:
+            self.cur.execute(get_cwe_list_query)
+        except mariadb.Error as e:
+            print(f"Error: {e}")
+
+        rows = self.cur.fetchall()
+        for row in rows:
+            cwe_name = row[0]
+            if cwe_name == 'NVD-CWE-noinfo':
+                cwe_name = 'noInfo'
+            if cwe_name in cwe_cnt:
+                cwe_cnt[cwe_name] = cwe_cnt[cwe_name] + 1
+            else:
+                cwe_cnt[cwe_name] = 1
+
+        cwe_cnt_sort = sorted(cwe_cnt.items(), key=lambda x: x[1], reverse=True)
+
+        # create chart
+        x = np.arange(10)
+        years = list(dict(cwe_cnt_sort).keys())[0:10]
+        values = list(dict(cwe_cnt_sort).values())[0:10]
+
+        plt.figure(figsize=(14, 7))
+        plt.bar(x, values)
+        plt.xticks(x, years, rotation=45)
+
+        plt.tight_layout()
+
+        self.check_directory()
+        plt.savefig('resources\\chart1.png')
+
+    def vuln_chart(self):
+        # get diagnostic results
+        get_diagnostic_results_query = """select * from diagnostic_results"""
+        total_cnt = 0
+        vuln_list = []
+        pc_categorie1 = ['PC-01', 'PC-02', 'PC-15']
+        pc_categorie2 = ['PC-03', 'PC-04', 'PC-05', 'PC-16', 'PC-17', 'PC-18']
+        pc_categorie3 = ['PC-06', 'PC-07', 'PC-08']
+        pc_categorie4 = ['PC-09', 'PC-10', 'PC-11', 'PC-12', 'PC-13', 'PC-14', 'PC-19']
+        server_categorie1 = ['W-01', 'W-02', 'W-03', 'W-04', 'W-05', 'W-06', 'W-46', 'W-47', 'W-48', 'W-49', 'W-50',
+                             'W-51',
+                             'W-52', 'W-53', 'W-54', 'W-55', 'W-56', 'W-57']
+        server_categorie2 = ['W-07', 'W-08', 'W-09', 'W-10', 'W-11', 'W-12', 'W-13', 'W-14', 'W-15', 'W-16', 'W-17',
+                             'W-18',
+                             'W-19', 'W-20', 'W-21', 'W-22', 'W-23', 'W-24', 'W-25', 'W-26', 'W-27', 'W-28', 'W-29',
+                             'W-30',
+                             'W-31', 'W-58', 'W-59', 'W-60', 'W-61', 'W-62', 'W-63', 'W-64', 'W-65', 'W-66', 'W-67',
+                             'W-68']
+        server_categorie3 = ['W-32', 'W-33', 'W-69']
+        server_categorie4 = ['W-34', 'W-35', 'W-70', 'W-71']
+        server_categorie5 = ['W-36', 'W-37', 'W-38', 'W-39', 'W-40', 'W-41', 'W-42', 'W-43', 'W-44', 'W-45', 'W-72',
+                             'W-73',
+                             'W-74', 'W-75', 'W-76', 'W-77', 'W-78', 'W-79', 'W-80', 'W-81']
+        server_categorie6 = ['W-82']
+        c1_cnt = 0
+        c2_cnt = 0
+        c3_cnt = 0
+        c4_cnt = 0
+        c5_cnt = 0
+        c6_cnt = 0
+
+        try:
+            self.cur.execute(get_diagnostic_results_query)
+        except mariadb.Error as e:
+            print(f"Error: {e}")
+
+        rows = self.cur.fetchall()
+        for row in rows:
+            if 'PC' in row[0]:
+                total_cnt += 1
+                if row[1] == '2':
+                    vuln_list.append(row[0])
+                    if row[0] in pc_categorie1:
+                        c1_cnt += 1
+                    elif row[0] in pc_categorie2:
+                        c2_cnt += 1
+                    elif row[0] in pc_categorie3:
+                        c3_cnt += 1
+                    elif row[0] in pc_categorie4:
+                        c4_cnt += 1
+            if 'W' in row[0]:
+                total_cnt += 1
+                if row[1] == '2':
+                    vuln_list.append(row[0])
+                    if row[0] in server_categorie1:
+                        c1_cnt += 1
+                    elif row[0] in server_categorie2:
+                        c2_cnt += 1
+                    elif row[0] in server_categorie3:
+                        c3_cnt += 1
+                    elif row[0] in server_categorie4:
+                        c4_cnt += 1
+                    elif row[0] in server_categorie5:
+                        c5_cnt += 1
+                    elif row[0] in server_categorie6:
+                        c6_cnt += 1
+
+        font_path = "C:/Windows/Fonts/NGULIM.TTF"
+        font = font_manager.FontProperties(fname=font_path).get_name()
+        rc('font', family=font)
+
+        vuln_per = '%.1f' % (len(vuln_list) / total_cnt * 100.0)
+        good_per = '%.1f' % (100.0 - float(vuln_per.split('%')[0]))
+
+        ratio = [good_per, vuln_per]
+        labels = ['양호', '취약']
+        colors = ['#8fd9b6', '#ff9999']
+        explode = [0.05, 0]
+
+        plt.figure(figsize=(8, 8))
+        plt.pie(ratio, labels=labels, autopct='%.1f%%', colors=colors, explode=explode)
+
+        self.check_directory()
+        plt.savefig('resources\\chart2.png')
+
+    def get_vuln_software_total(self):
+        get_vuln_software_query = """select count(*) from vuln_list"""
+
+        try:
+            self.cur.execute(get_vuln_software_query)
+        except mariadb.Error as e:
+            print(f"Error: {e}")
+
+        row = self.cur.fetchone()
+
+        return str(row[0])
+
+    def get_installed_software_total(self):
+        get_installed_software_query = """select count(*) from software_list"""
+
+        try:
+            self.cur.execute(get_installed_software_query)
+        except mariadb.Error as e:
+            print(f"Error: {e}")
+
+        row = self.cur.fetchone()
+
+        return str(row[0])
+
+    def get_cve_total(self):
+        get_cve_total_query = """select count(*) from cve_list"""
+
+        try:
+            self.cur.execute(get_cve_total_query)
+        except mariadb.Error as e:
+            print(f"Error: {e}")
+
+        row = self.cur.fetchone()
+
+        return str(row[0])
