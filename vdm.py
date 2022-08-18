@@ -552,8 +552,8 @@ class App(customtkinter.CTk):
 
         conn.close()
 
-        # vuln_comparison = threading.Thread(target=self.vuln_comparison)
-        # vuln_comparison.start()
+        vuln_comparison = threading.Thread(target=self.vuln_comparison)
+        vuln_comparison.start()
 
     # view cve detail webpage
     def vuln_OnDoubleClick(self, event):
@@ -722,9 +722,8 @@ class App(customtkinter.CTk):
         for item in selected:
             self.append_log('Start diagnosing the ' + item[1:-1])
 
-            #subprocess.call(['C:\\Users\\USER\\Desktop\\vdm\\script\\' + self.my_os + '\\' + item[1:-1] + '.bat'])
-            print('C:\\Users\\USER\\Desktop\\vdm\\script\\' + self.my_os + '\\' + item[1:-1] + '.bat')
-            #time.sleep(1)
+            subprocess.call(['C:\\Users\\USER\\Desktop\\vdm\\script\\' + self.my_os + '\\' + item[1:-1] + '.bat'])
+      
 
             self.progressbar.set((selected.index(item)+1) / len(selected) * 1.0)
             self.append_log(item[1:-1] + ' has been diagnosed.')
@@ -924,6 +923,7 @@ class App(customtkinter.CTk):
         merger.append(outputFile)
         for vuln in vuln_list:
             merger.append("C:\\Users\\USER\\Desktop\\vdm\\Report Source\\" + self.my_os + "\\" + vuln + ".pdf")
+            
         merger.write("C:\\Users\\USER\\Desktop\\Report.pdf")
         merger.close()
 
